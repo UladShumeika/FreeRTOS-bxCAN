@@ -1,0 +1,4 @@
+# ignored directories
+STM32+FreeRTOS+bxCAN/.settings/
+STM32+FreeRTOS+bxCAN/Debug/
+
