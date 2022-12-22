@@ -37,6 +37,12 @@ void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer, StackTy
   */
 void MX_FREERTOS_Init(void)
 {
+
+#ifdef HEARTBEAT
+	HEARTBEAT_FreeRTOS_init();
+#endif
+
+
 	/* Create the thread(s) */
 	/* definition and creation of defaultTask */
 	osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
