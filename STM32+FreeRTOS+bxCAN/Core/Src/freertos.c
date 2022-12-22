@@ -38,4 +38,8 @@ void MX_FREERTOS_Init(void)
 	HEARTBEAT_FreeRTOS_init();
 #endif
 
+#ifdef bxCAN
+	bxCAN_FreeRTOS_init();
+#endif
+
 }
