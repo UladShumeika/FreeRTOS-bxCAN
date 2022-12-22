@@ -36,6 +36,23 @@ CAN_HandleTypeDef hcan1;
 // Callback functions
 //---------------------------------------------------------------------------
 
+/**
+  * @brief  Rx FIFO 0 message pending callback.
+  * @param  hcan: pointer to a CAN_HandleTypeDef structure that contains the configuration information for the
+  * 			  specified CAN.
+  * @retval None
+  */
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef * hcan)
+{
+
+}
+
+
+
+
+
+
+
 
 
 
