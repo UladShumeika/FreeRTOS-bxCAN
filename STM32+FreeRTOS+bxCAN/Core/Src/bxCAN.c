@@ -18,7 +18,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "can.h"
+#include <bxCAN.h>
 
 /* USER CODE BEGIN 0 */
 
