@@ -19,10 +19,25 @@ CAN_HandleTypeDef hcan1;
 //---------------------------------------------------------------------------
 // Descriptions of FreeRTOS elements
 //---------------------------------------------------------------------------
+static osThreadId InterruptHandlingRxFIFO0Handle;
 
 //---------------------------------------------------------------------------
 // FreeRTOS's threads
 //---------------------------------------------------------------------------
+
+/**
+* @brief Function implementing the InterruptHandlingRxFIFO0 thread.
+* @param argument: Not used
+* @retval None
+*/
+void InterruptHandlingRxFIFO0Task(void const* argument)
+{
+	/* Infinite loop */
+	for(;;)
+	{
+		osDelay(1);
+	}
+}
 
 //---------------------------------------------------------------------------
 // Others functions
@@ -31,6 +46,19 @@ CAN_HandleTypeDef hcan1;
 //---------------------------------------------------------------------------
 // Initialization functions
 //---------------------------------------------------------------------------
+
+/**
+  * @brief  FreeRTOS initialization for bxCAN module
+  * @param  None
+  * @retval None
+  */
+void bxCAN_FreeRTOS_init(void)
+{
+	// Create the thread(s)
+	// definition and creation of HeartbeatTask
+	osThreadDef(InterruptHandlingRxFIFO0, InterruptHandlingRxFIFO0Task, osPriorityBelowNormal, 0, 128);
+	InterruptHandlingRxFIFO0Handle = osThreadCreate(osThread(InterruptHandlingRxFIFO0), NULL);
+}
 
 //---------------------------------------------------------------------------
 // Callback functions
