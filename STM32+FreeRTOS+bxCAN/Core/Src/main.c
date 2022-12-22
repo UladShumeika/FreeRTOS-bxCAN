@@ -9,15 +9,11 @@
 // Includes
 //---------------------------------------------------------------------------
 #include "main.h"
-#include "cmsis_os.h"
-#include "can.h"
-#include "gpio.h"
 
 //---------------------------------------------------------------------------
 // Static function prototypes
 //---------------------------------------------------------------------------
-void SystemClock_Config(void);
-void MX_FREERTOS_Init(void);
+static void SystemClock_Config(void);
 
 /**
   * @brief  The application entry point.
@@ -28,9 +24,6 @@ int main(void)
 	HAL_Init();
 
 	SystemClock_Config();
-
-	MX_GPIO_Init();
-	MX_CAN1_Init();
 
 	// Call init function for freertos objects (in freertos.c)
 	MX_FREERTOS_Init();

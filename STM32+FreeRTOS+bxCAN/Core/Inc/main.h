@@ -18,6 +18,7 @@ extern "C" {
 // Defines
 //---------------------------------------------------------------------------
 #define HEARTBEAT
+//#define bxCAN
 
 //---------------------------------------------------------------------------
 // Module's includes
@@ -27,10 +28,15 @@ extern "C" {
 	#include "heartbeat.h"
 #endif
 
+#ifdef bxCAN
+	#include "bxCAN.h"
+#endif
+
 //---------------------------------------------------------------------------
 // External function prototypes
 //---------------------------------------------------------------------------
 void Error_Handler(void);
+void MX_FREERTOS_Init(void);
 
 #ifdef __cplusplus
 }
