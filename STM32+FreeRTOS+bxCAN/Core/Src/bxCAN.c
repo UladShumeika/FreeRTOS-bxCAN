@@ -18,7 +18,7 @@
 // Typedefs
 //---------------------------------------------------------------------------
 CAN_HandleTypeDef hcan1;
-CAN_FilterTypeDef  sFilterConfig;
+CAN_FilterTypeDef sFilterConfig;
 
 //---------------------------------------------------------------------------
 // Static function prototypes
@@ -30,6 +30,7 @@ static void bxCAN_CAN1_init(void);
 // Descriptions of FreeRTOS elements
 //---------------------------------------------------------------------------
 static osThreadId InterruptHandlingRxFIFO0Handle;
+static osSemaphoreId InterruptRxFIFO0SemHandle;
 
 //---------------------------------------------------------------------------
 // FreeRTOS's threads
@@ -47,6 +48,8 @@ void InterruptHandlingRxFIFO0Task(void const* argument)
 	/* Infinite loop */
 	for(;;)
 	{
+		osSemaphoreWait(InterruptRxFIFO0SemHandle, portMAX_DELAY);
+
 		osDelay(1);
 	}
 }
@@ -143,9 +146,14 @@ static void bxCAN_GPIO_init(void)
 void bxCAN_FreeRTOS_init(void)
 {
 	// Create the thread(s)
-	// definition and creation of HeartbeatTask
+	// definition and creation of InterruptHandlingRxFIFO0Task
 	osThreadDef(InterruptHandlingRxFIFO0, InterruptHandlingRxFIFO0Task, osPriorityBelowNormal, 0, 128);
 	InterruptHandlingRxFIFO0Handle = osThreadCreate(osThread(InterruptHandlingRxFIFO0), NULL);
+
+	// Create the semaphore(s)
+	// definition and creation of InterruptRxFIFO0Sem
+	osSemaphoreDef(InterruptRxFIFO0Sem);
+	InterruptRxFIFO0SemHandle = osSemaphoreCreate(osSemaphore(InterruptRxFIFO0Sem), 1);
 }
 
 //---------------------------------------------------------------------------
@@ -160,7 +168,15 @@ void bxCAN_FreeRTOS_init(void)
   */
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef * hcan)
 {
+	static portBASE_TYPE xHigherPriorityTaskWoken;
+	xHigherPriorityTaskWoken = pdFALSE;
 
+	xSemaphoreGiveFromISR(InterruptRxFIFO0SemHandle, &xHigherPriorityTaskWoken);
+
+	if(xHigherPriorityTaskWoken == pdTRUE)
+	{
+		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+	}
 }
 
 /**
