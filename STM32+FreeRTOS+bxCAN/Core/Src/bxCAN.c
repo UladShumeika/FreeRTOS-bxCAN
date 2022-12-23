@@ -64,7 +64,7 @@ void InterruptHandlingRxFIFO0Task(void const* argument)
 	{
 		osSemaphoreWait(InterruptRxFIFO0SemHandle, portMAX_DELAY);
 
-		osDelay(1);
+		HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &RxHeader, RxData);
 	}
 }
 
