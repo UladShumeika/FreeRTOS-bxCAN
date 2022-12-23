@@ -30,7 +30,9 @@ static void bxCAN_CAN1_init(void);
 // Descriptions of FreeRTOS elements
 //---------------------------------------------------------------------------
 static osThreadId InterruptHandlingRxFIFO0Handle;
+static osThreadId InterruptHandlingErrorHandle;
 static osSemaphoreId InterruptRxFIFO0SemHandle;
+static osSemaphoreId InterruprtErrorCANSemHandle;
 
 //---------------------------------------------------------------------------
 // FreeRTOS's threads
@@ -49,6 +51,22 @@ void InterruptHandlingRxFIFO0Task(void const* argument)
 	for(;;)
 	{
 		osSemaphoreWait(InterruptRxFIFO0SemHandle, portMAX_DELAY);
+
+		osDelay(1);
+	}
+}
+
+/**
+* @brief Function implementing the InterruptHandlingError thread.
+* @param argument: Not used
+* @retval None
+*/
+void InterruptHandlingErrorTask(void const* argument)
+{
+	/* Infinite loop */
+	for(;;)
+	{
+		osSemaphoreWait(InterruprtErrorCANSemHandle, portMAX_DELAY);
 
 		osDelay(1);
 	}
@@ -150,10 +168,18 @@ void bxCAN_FreeRTOS_init(void)
 	osThreadDef(InterruptHandlingRxFIFO0, InterruptHandlingRxFIFO0Task, osPriorityBelowNormal, 0, 128);
 	InterruptHandlingRxFIFO0Handle = osThreadCreate(osThread(InterruptHandlingRxFIFO0), NULL);
 
+	// definition and creation of InterruptHandlingErrorTask
+	osThreadDef(InterruptHandlingError, InterruptHandlingErrorTask, osPriorityBelowNormal, 0, 128);
+	InterruptHandlingErrorHandle = osThreadCreate(osThread(InterruptHandlingError), NULL);
+
 	// Create the semaphore(s)
 	// definition and creation of InterruptRxFIFO0Sem
 	osSemaphoreDef(InterruptRxFIFO0Sem);
 	InterruptRxFIFO0SemHandle = osSemaphoreCreate(osSemaphore(InterruptRxFIFO0Sem), 1);
+
+	// definition and creation of InterruprtErrorCANSem
+	osSemaphoreDef(InterruprtErrorCANSem);
+	InterruprtErrorCANSemHandle = osSemaphoreCreate(osSemaphore(InterruprtErrorCANSem), 1);
 }
 
 //---------------------------------------------------------------------------
@@ -187,5 +213,13 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef * hcan)
   */
 void HAL_CAN_ErrorCallback(CAN_HandleTypeDef *hcan)
 {
+	static portBASE_TYPE xHigherPriorityTaskWoken;
+	xHigherPriorityTaskWoken = pdFALSE;
 
+	xSemaphoreGiveFromISR(InterruprtErrorCANSemHandle, &xHigherPriorityTaskWoken);
+
+	if(xHigherPriorityTaskWoken == pdTRUE)
+	{
+		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+	}
 }
