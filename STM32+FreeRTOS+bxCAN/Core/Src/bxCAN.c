@@ -18,11 +18,13 @@
 // Typedefs
 //---------------------------------------------------------------------------
 CAN_HandleTypeDef hcan1;
+CAN_FilterTypeDef  sFilterConfig;
 
 //---------------------------------------------------------------------------
 // Static function prototypes
 //---------------------------------------------------------------------------
 static void bxCAN_GPIO_init(void);
+static void bxCAN_CAN1_init(void);
 
 //---------------------------------------------------------------------------
 // Descriptions of FreeRTOS elements
@@ -40,6 +42,8 @@ static osThreadId InterruptHandlingRxFIFO0Handle;
 */
 void InterruptHandlingRxFIFO0Task(void const* argument)
 {
+	bxCAN_CAN1_init();
+
 	/* Infinite loop */
 	for(;;)
 	{
@@ -56,6 +60,52 @@ void InterruptHandlingRxFIFO0Task(void const* argument)
 //---------------------------------------------------------------------------
 
 /**
+  * @brief  CAN1 configuration for bxCAN module
+  * @param  None
+  * @retval None
+  */
+static void bxCAN_CAN1_init(void)
+{
+	__HAL_RCC_CAN1_CLK_ENABLE();
+
+	bxCAN_GPIO_init();
+
+	hcan1.Instance 							= CAN1;
+	hcan1.Init.Prescaler 					= 4;
+	hcan1.Init.Mode 						= CAN_MODE_SILENT_LOOPBACK;
+	hcan1.Init.SyncJumpWidth 				= CAN_SJW_1TQ;
+	hcan1.Init.TimeSeg1 					= CAN_BS1_13TQ;
+	hcan1.Init.TimeSeg2 					= CAN_BS2_2TQ;
+	hcan1.Init.TimeTriggeredMode 			= DISABLE;
+	hcan1.Init.AutoBusOff 					= ENABLE;
+	hcan1.Init.AutoWakeUp 					= DISABLE;
+	hcan1.Init.AutoRetransmission 			= ENABLE;
+	hcan1.Init.ReceiveFifoLocked 			= DISABLE;
+	hcan1.Init.TransmitFifoPriority 		= ENABLE;
+
+	if(HAL_CAN_Init(&hcan1) != HAL_OK)
+	{
+		Error_Handler();
+	}
+
+	sFilterConfig.FilterIdHigh				= 0x0000;
+	sFilterConfig.FilterIdLow				= 0x0000;
+	sFilterConfig.FilterMaskIdHigh			= 0x0000;
+	sFilterConfig.FilterMaskIdLow			= 0x0000;
+	sFilterConfig.FilterFIFOAssignment		= CAN_FILTER_FIFO0;
+	sFilterConfig.FilterBank				= 0;
+	sFilterConfig.FilterMode				= CAN_FILTERMODE_IDMASK;
+	sFilterConfig.FilterScale				= CAN_FILTERSCALE_32BIT;
+	sFilterConfig.FilterActivation			= CAN_FILTER_ENABLE;
+	sFilterConfig.SlaveStartFilterBank		= 14;
+
+	if(HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
+	{
+		Error_Handler();
+	}
+}
+
+/**
   * @brief  GPIO configuration for bxCAN module
   * @param  None
   * @retval None
@@ -64,7 +114,6 @@ static void bxCAN_GPIO_init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-	__HAL_RCC_CAN1_CLK_ENABLE();
 	__HAL_RCC_GPIOH_CLK_ENABLE();
 	__HAL_RCC_GPIOA_CLK_ENABLE();
 
@@ -123,40 +172,4 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef * hcan)
 void HAL_CAN_ErrorCallback(CAN_HandleTypeDef *hcan)
 {
 
-}
-
-
-
-
-
-
-
-
-/* CAN1 init function */
-void MX_CAN1_Init(void)
-{
-
-  /* USER CODE BEGIN CAN1_Init 0 */
-
-  /* USER CODE END CAN1_Init 0 */
-
-  /* USER CODE BEGIN CAN1_Init 1 */
-
-  /* USER CODE END CAN1_Init 1 */
-  hcan1.Instance = CAN1;
-  hcan1.Init.Prescaler = 4;
-  hcan1.Init.Mode = CAN_MODE_SILENT_LOOPBACK;
-  hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
-  hcan1.Init.TimeSeg1 = CAN_BS1_13TQ;
-  hcan1.Init.TimeSeg2 = CAN_BS2_2TQ;
-  hcan1.Init.TimeTriggeredMode = DISABLE;
-  hcan1.Init.AutoBusOff = ENABLE;
-  hcan1.Init.AutoWakeUp = DISABLE;
-  hcan1.Init.AutoRetransmission = ENABLE;
-  hcan1.Init.ReceiveFifoLocked = DISABLE;
-  hcan1.Init.TransmitFifoPriority = ENABLE;
-  if (HAL_CAN_Init(&hcan1) != HAL_OK)
-  {
-    Error_Handler();
-  }
 }
