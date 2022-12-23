@@ -37,6 +37,7 @@ static void bxCAN_create_message(uint32_t id, uint32_t ide, uint32_t rtr, uint32
 //---------------------------------------------------------------------------
 static osThreadId InterruptHandlingRxFIFO0Handle;
 static osThreadId InterruptHandlingErrorHandle;
+static osThreadId InterruptHandlingSendHandle;
 static osSemaphoreId InterruptRxFIFO0SemHandle;
 static osSemaphoreId InterruprtErrorCANSemHandle;
 
@@ -52,14 +53,28 @@ uint32_t TxMailbox = 0;
 //---------------------------------------------------------------------------
 
 /**
+* @brief Function implementing the InterruptHandlingSend thread.
+* @param argument: Not used
+* @retval None
+*/
+void InterruptHandlingSendTask(void const* argument)
+{
+	bxCAN_CAN1_init();
+
+	/* Infinite loop */
+	for(;;)
+	{
+		osDelay(1);
+	}
+}
+
+/**
 * @brief Function implementing the InterruptHandlingRxFIFO0 thread.
 * @param argument: Not used
 * @retval None
 */
 void InterruptHandlingRxFIFO0Task(void const* argument)
 {
-	bxCAN_CAN1_init();
-
 	/* Infinite loop */
 	for(;;)
 	{
@@ -223,6 +238,10 @@ void bxCAN_FreeRTOS_init(void)
 	// definition and creation of InterruptHandlingErrorTask
 	osThreadDef(InterruptHandlingError, InterruptHandlingErrorTask, osPriorityBelowNormal, 0, 128);
 	InterruptHandlingErrorHandle = osThreadCreate(osThread(InterruptHandlingError), NULL);
+
+	// definition and creation of InterruptHandlingSendTask
+	osThreadDef(InterruptHandlingSend, InterruptHandlingErrorTask, osPriorityBelowNormal, 0, 128);
+	InterruptHandlingSendHandle = osThreadCreate(osThread(InterruptHandlingSend), NULL);
 
 	// Create the semaphore(s)
 	// definition and creation of InterruptRxFIFO0Sem
