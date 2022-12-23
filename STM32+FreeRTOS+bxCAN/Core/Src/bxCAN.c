@@ -169,6 +169,13 @@ static void bxCAN_CAN1_init(void)
 
 	HAL_CAN_Start(&hcan1);
 
+	HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING |
+										 CAN_IT_TX_MAILBOX_EMPTY |
+										 CAN_IT_ERROR_WARNING |
+										 CAN_IT_ERROR_PASSIVE |
+										 CAN_IT_BUSOFF |
+										 CAN_IT_LAST_ERROR_CODE |
+										 CAN_IT_ERROR);
 }
 
 /**
