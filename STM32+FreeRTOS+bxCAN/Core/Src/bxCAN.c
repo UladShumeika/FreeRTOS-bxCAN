@@ -30,6 +30,7 @@ CAN_TxHeaderTypeDef TxHeader;
 //---------------------------------------------------------------------------
 static void bxCAN_GPIO_init(void);
 static void bxCAN_CAN1_init(void);
+static void bxCAN_create_message(uint32_t id, uint32_t ide, uint32_t rtr, uint32_t dlc, CAN_TxHeaderTypeDef *pTxHeader);
 
 //---------------------------------------------------------------------------
 // Descriptions of FreeRTOS elements
@@ -87,6 +88,35 @@ void InterruptHandlingErrorTask(void const* argument)
 //---------------------------------------------------------------------------
 // Others functions
 //---------------------------------------------------------------------------
+
+/**
+  * @brief  Create a CAN frame
+  * @param	id specifies the identifier
+  * @param 	ide specifies the type of identifier for the message that will be transmitted.
+  * 		This parameter can be a value of @ref CAN_identifier_type
+  * @param 	rtr specifies the type of frame for the message that will be transmitted.
+  * 		This parameter can be a value of @ref CAN_remote_transmission_request
+  * @param	dlc specifies the length of the frame that will be transmitted.
+  * 		This parameter must be a number between Min_Data = 0 and Max_Data = 8
+  * @param 	pTxHeader pointer to a CAN_TxHeaderTypeDef structure
+  * @retval None
+  */
+static void bxCAN_create_message(uint32_t id, uint32_t ide, uint32_t rtr, uint32_t dlc, CAN_TxHeaderTypeDef *pTxHeader)
+{
+	if(ide == CAN_ID_STD)
+	{
+		pTxHeader->StdId = id;
+		pTxHeader->ExtId = 0;
+	} else
+	{
+		pTxHeader->StdId = 0;
+		pTxHeader->ExtId = id;
+	}
+
+	pTxHeader->IDE = ide;
+	pTxHeader->RTR = rtr;
+	pTxHeader->DLC = dlc;
+}
 
 //---------------------------------------------------------------------------
 // Initialization functions
