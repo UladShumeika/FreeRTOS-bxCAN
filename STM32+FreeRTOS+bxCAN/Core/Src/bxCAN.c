@@ -14,11 +14,16 @@
 #define CAN1_SCE_PREEMPPRIORITY					(6U)
 #define CAN1_SCE_SUBPRIORITY					(0U)
 
+#define DATA_FIELD								(8U) // bytes
+
 //---------------------------------------------------------------------------
 // Typedefs
 //---------------------------------------------------------------------------
 CAN_HandleTypeDef hcan1;
 CAN_FilterTypeDef sFilterConfig;
+
+CAN_RxHeaderTypeDef RxHeader;
+CAN_TxHeaderTypeDef TxHeader;
 
 //---------------------------------------------------------------------------
 // Static function prototypes
@@ -33,6 +38,13 @@ static osThreadId InterruptHandlingRxFIFO0Handle;
 static osThreadId InterruptHandlingErrorHandle;
 static osSemaphoreId InterruptRxFIFO0SemHandle;
 static osSemaphoreId InterruprtErrorCANSemHandle;
+
+//---------------------------------------------------------------------------
+// Variables
+//---------------------------------------------------------------------------
+uint8_t RxData[DATA_FIELD] = {0,};
+uint8_t TxData[DATA_FIELD] = {0,};
+uint32_t TxMailbox = 0;
 
 //---------------------------------------------------------------------------
 // FreeRTOS's threads
