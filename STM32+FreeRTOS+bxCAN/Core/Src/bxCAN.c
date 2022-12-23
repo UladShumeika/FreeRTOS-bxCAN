@@ -44,7 +44,7 @@ static osSemaphoreId InterruprtErrorCANSemHandle;
 // Variables
 //---------------------------------------------------------------------------
 uint8_t RxData[DATA_FIELD] = {0,};
-uint8_t TxData[DATA_FIELD] = {0,};
+uint8_t TxData[DATA_FIELD] = {0, 1, 2, 3, 4, 5, 6, 7};
 uint32_t TxMailbox = 0;
 
 //---------------------------------------------------------------------------
@@ -166,6 +166,9 @@ static void bxCAN_CAN1_init(void)
 	{
 		Error_Handler();
 	}
+
+	HAL_CAN_Start(&hcan1);
+
 }
 
 /**
