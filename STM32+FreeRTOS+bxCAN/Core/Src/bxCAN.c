@@ -240,7 +240,7 @@ void bxCAN_FreeRTOS_init(void)
 	InterruptHandlingErrorHandle = osThreadCreate(osThread(InterruptHandlingError), NULL);
 
 	// definition and creation of InterruptHandlingSendTask
-	osThreadDef(InterruptHandlingSend, InterruptHandlingErrorTask, osPriorityBelowNormal, 0, 128);
+	osThreadDef(InterruptHandlingSend, InterruptHandlingSendTask, osPriorityBelowNormal, 0, 128);
 	InterruptHandlingSendHandle = osThreadCreate(osThread(InterruptHandlingSend), NULL);
 
 	// Create the semaphore(s)
