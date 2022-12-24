@@ -232,16 +232,16 @@ void bxCAN_FreeRTOS_init(void)
 {
 	// Create the thread(s)
 	// definition and creation of InterruptHandlingRxFIFO0Task
-	osThreadDef(InterruptHandlingRxFIFO0, InterruptHandlingRxFIFO0Task, osPriorityBelowNormal, 0, 128);
-	InterruptHandlingRxFIFO0Handle = osThreadCreate(osThread(InterruptHandlingRxFIFO0), NULL);
+	osThreadDef(ReceivingMessages, InterruptHandlingRxFIFO0Task, osPriorityBelowNormal, 0, 128);
+	InterruptHandlingRxFIFO0Handle = osThreadCreate(osThread(ReceivingMessages), NULL);
 
 	// definition and creation of InterruptHandlingErrorTask
-	osThreadDef(InterruptHandlingError, InterruptHandlingErrorTask, osPriorityBelowNormal, 0, 128);
-	InterruptHandlingErrorHandle = osThreadCreate(osThread(InterruptHandlingError), NULL);
+	osThreadDef(ErrorProcessing, InterruptHandlingErrorTask, osPriorityBelowNormal, 0, 128);
+	InterruptHandlingErrorHandle = osThreadCreate(osThread(ErrorProcessing), NULL);
 
 	// definition and creation of InterruptHandlingSendTask
-	osThreadDef(InterruptHandlingSend, InterruptHandlingSendTask, osPriorityBelowNormal, 0, 128);
-	InterruptHandlingSendHandle = osThreadCreate(osThread(InterruptHandlingSend), NULL);
+	osThreadDef(SendingMessages, InterruptHandlingSendTask, osPriorityBelowNormal, 0, 128);
+	InterruptHandlingSendHandle = osThreadCreate(osThread(SendingMessages), NULL);
 
 	// Create the semaphore(s)
 	// definition and creation of InterruptRxFIFO0Sem
