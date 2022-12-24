@@ -8,10 +8,13 @@
 //---------------------------------------------------------------------------
 
 // CAN1 interrupt priorities
+#define CAN1_TX_PREEMPPRIORITY					(5U)
+#define CAN1_TX_SUBPRIORITY						(0U)
+
 #define CAN1_RX0_PREEMPPRIORITY					(5U)
 #define CAN1_RX0_SUBPRIORITY					(0U)
 
-#define CAN1_SCE_PREEMPPRIORITY					(6U)
+#define CAN1_SCE_PREEMPPRIORITY					(5U)
 #define CAN1_SCE_SUBPRIORITY					(0U)
 
 #define DATA_FIELD								(8U) // bytes
@@ -218,6 +221,9 @@ static void bxCAN_GPIO_init(void)
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 	// CAN1 interrupt init
+	HAL_NVIC_SetPriority(CAN1_TX_IRQn, CAN1_TX_PREEMPPRIORITY, CAN1_TX_SUBPRIORITY);
+	HAL_NVIC_EnableIRQ(CAN1_TX_IRQn);
+
 	HAL_NVIC_SetPriority(CAN1_RX0_IRQn, CAN1_RX0_PREEMPPRIORITY, CAN1_RX0_SUBPRIORITY);
 	HAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);
 
