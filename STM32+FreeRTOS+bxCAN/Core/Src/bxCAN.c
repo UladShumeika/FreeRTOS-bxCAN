@@ -40,6 +40,7 @@ static osThreadId InterruptHandlingErrorHandle;
 static osThreadId InterruptHandlingSendHandle;
 static osSemaphoreId InterruptRxFIFO0SemHandle;
 static osSemaphoreId InterruprtErrorCANSemHandle;
+static osSemaphoreId SendingMessagesSemHandle;
 
 //---------------------------------------------------------------------------
 // Variables
@@ -64,6 +65,7 @@ void InterruptHandlingSendTask(void const* argument)
 	/* Infinite loop */
 	for(;;)
 	{
+		osSemaphoreWait(SendingMessagesSemHandle, portMAX_DELAY);
 		osDelay(1);
 	}
 }
@@ -251,6 +253,10 @@ void bxCAN_FreeRTOS_init(void)
 	// definition and creation of InterruprtErrorCANSem
 	osSemaphoreDef(InterruprtErrorCANSem);
 	InterruprtErrorCANSemHandle = osSemaphoreCreate(osSemaphore(InterruprtErrorCANSem), 1);
+
+	// definition and creation of SendingMessagesSem
+	osSemaphoreDef(SendingMessagesSem);
+	SendingMessagesSemHandle = osSemaphoreCreate(osSemaphore(SendingMessagesSem), 1);
 }
 
 //---------------------------------------------------------------------------
@@ -265,7 +271,15 @@ void bxCAN_FreeRTOS_init(void)
   */
 void HAL_CAN_TxMailbox0CompleteCallback(CAN_HandleTypeDef *hcan)
 {
+	static portBASE_TYPE xHigherPriorityTaskWoken;
+	xHigherPriorityTaskWoken = pdFALSE;
 
+	xSemaphoreGiveFromISR(SendingMessagesSemHandle, &xHigherPriorityTaskWoken);
+
+	if(xHigherPriorityTaskWoken == pdTRUE)
+	{
+		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+	}
 }
 
 /**
