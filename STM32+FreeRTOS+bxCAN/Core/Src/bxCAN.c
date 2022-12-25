@@ -240,7 +240,7 @@ void bxCAN_FreeRTOS_init(void)
 {
 	// Create the thread(s)
 	// definition and creation of InterruptHandlingRxFIFO0Task
-	osThreadDef(ReceivingMessages, InterruptHandlingRxFIFO0Task, osPriorityBelowNormal, 0, 128);
+	osThreadDef(ReceivingMessages, InterruptHandlingRxFIFO0Task, osPriorityNormal, 0, 128);
 	InterruptHandlingRxFIFO0Handle = osThreadCreate(osThread(ReceivingMessages), NULL);
 
 	// definition and creation of InterruptHandlingErrorTask
