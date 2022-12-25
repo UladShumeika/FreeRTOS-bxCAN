@@ -127,11 +127,14 @@ void InterruptHandlingErrorTask(void const* argument)
 //---------------------------------------------------------------------------
 
 /**
-  * @brief  Create a CAN bus frame. This frame has the following parameters: 11-bit identifier, data frame, mode transmit global time off
-  * @param	idFrames a pointer to an array with id frames
-  * @param 	messages a pointer to an array with messages for frames
-  * @param	amountMessages amount of messages
-  * @param 	pTxHeader pointer to a CAN_TxHeaderTypeDef structure
+  * @brief  Create a CAN bus frame. This frame has the following parameters:
+  * 		11-bit identifier, data frame, mode transmit global time off
+  * @param	hcan pointer to a CAN_HandleTypeDef structure that contains
+  * 		the configuration information for the specified CAN.
+  * @param	idFrames a pointer to an array with id frames.
+  * @param 	messages a pointer to an array with messages for frames.
+  * @param	amountMessages amount of messages.
+  * @param 	pTxHeader pointer to a CAN_TxHeaderTypeDef structure.
   * @retval None
   */
 static void bxCAN_create_and_add_message(CAN_HandleTypeDef* hcan, const uint32_t* idFrames, const char** messages, uint8_t amountMessages, CAN_TxHeaderTypeDef *pHeader)
