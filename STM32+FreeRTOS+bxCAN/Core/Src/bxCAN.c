@@ -315,13 +315,5 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef * hcan)
   */
 void HAL_CAN_ErrorCallback(CAN_HandleTypeDef *hcan)
 {
-	static portBASE_TYPE xHigherPriorityTaskWoken;
-	xHigherPriorityTaskWoken = pdFALSE;
-
-	xSemaphoreGiveFromISR(InterruprtErrorCANSemHandle, &xHigherPriorityTaskWoken);
-
-	if(xHigherPriorityTaskWoken == pdTRUE)
-	{
-		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-	}
+	osSemaphoreRelease(InterruprtErrorCANSemHandle);
 }
