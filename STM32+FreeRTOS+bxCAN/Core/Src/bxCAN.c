@@ -1,7 +1,8 @@
 //---------------------------------------------------------------------------
 // Includes
 //---------------------------------------------------------------------------
-#include <bxCAN.h>
+#include "bxCAN.h"
+#include <string.h>
 
 //---------------------------------------------------------------------------
 // Defines
@@ -35,7 +36,7 @@ CAN_TxHeaderTypeDef TxHeader;
 //---------------------------------------------------------------------------
 static void bxCAN_GPIO_init(void);
 static void bxCAN_CAN1_init(void);
-static void bxCAN_create_message(uint32_t id, uint32_t ide, uint32_t rtr, uint32_t dlc, CAN_TxHeaderTypeDef *pTxHeader);
+static void bxCAN_create_and_add_message(CAN_HandleTypeDef *hcan, const uint32_t* idFrames, const char** messages, uint8_t amountMessages, CAN_TxHeaderTypeDef *pHeader);
 
 //---------------------------------------------------------------------------
 // Descriptions of FreeRTOS elements
@@ -51,8 +52,6 @@ static osSemaphoreId SendingMessagesSemHandle;
 // Variables
 //---------------------------------------------------------------------------
 uint8_t RxData[DATA_FIELD] = {0,};
-uint8_t TxData[DATA_FIELD] = {0, 1, 2, 3, 4, 5, 6, 7};
-uint32_t TxMailbox = 0;
 
 const uint32_t idFrames[AMOUNT_MESSAGES] = {0x51F, 0x2B6, 0x9A, 0x7C8, 0x560, 0x622, 0x56E, 0x34E, 0x4B9, 0x42E, 0x38B, 0x1E0,
 										   0x3DB, 0x32A, 0x7B9, 0x772, 0x13B, 0x36C, 0x4B5, 0x3D7};
@@ -82,10 +81,12 @@ void InterruptHandlingSendTask(void const* argument)
 
 		if(firstStart == 1)
 		{
-			bxCAN_create_message(0x11, CAN_ID_STD, CAN_RTR_DATA, 8, &TxHeader);
-			HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox);
+			firstStart = 0;
+			bxCAN_create_and_add_message(&hcan1, idFrames, messages, AMOUNT_MESSAGES, &TxHeader);
+		} else
+		{
+			bxCAN_create_and_add_message(&hcan1, idFrames, messages, AMOUNT_MESSAGES, &TxHeader);
 		}
-		firstStart = 0;
 	}
 }
 
@@ -126,32 +127,37 @@ void InterruptHandlingErrorTask(void const* argument)
 //---------------------------------------------------------------------------
 
 /**
-  * @brief  Create a CAN frame
-  * @param	id specifies the identifier
-  * @param 	ide specifies the type of identifier for the message that will be transmitted.
-  * 		This parameter can be a value of @ref CAN_identifier_type
-  * @param 	rtr specifies the type of frame for the message that will be transmitted.
-  * 		This parameter can be a value of @ref CAN_remote_transmission_request
-  * @param	dlc specifies the length of the frame that will be transmitted.
-  * 		This parameter must be a number between Min_Data = 0 and Max_Data = 8
+  * @brief  Create a CAN bus frame. This frame has the following parameters: 11-bit identifier, data frame, mode transmit global time off
+  * @param	idFrames a pointer to an array with id frames
+  * @param 	messages a pointer to an array with messages for frames
+  * @param	amountMessages amount of messages
   * @param 	pTxHeader pointer to a CAN_TxHeaderTypeDef structure
   * @retval None
   */
-static void bxCAN_create_message(uint32_t id, uint32_t ide, uint32_t rtr, uint32_t dlc, CAN_TxHeaderTypeDef *pTxHeader)
+static void bxCAN_create_and_add_message(CAN_HandleTypeDef* hcan, const uint32_t* idFrames, const char** messages, uint8_t amountMessages, CAN_TxHeaderTypeDef *pHeader)
 {
-	if(ide == CAN_ID_STD)
-	{
-		pTxHeader->StdId = id;
-		pTxHeader->ExtId = 0;
-	} else
-	{
-		pTxHeader->StdId = 0;
-		pTxHeader->ExtId = id;
-	}
+	static uint8_t counter = 0;
+	static uint32_t TxMailbox = 0;
+	uint32_t lengthMessage = 0;
 
-	pTxHeader->IDE = ide;
-	pTxHeader->RTR = rtr;
-	pTxHeader->DLC = dlc;
+	pHeader->StdId = idFrames[counter];
+	pHeader->ExtId = 0x0000;
+	pHeader->IDE = CAN_ID_STD;
+	pHeader->RTR = CAN_RTR_DATA;
+
+	lengthMessage = strlen(messages[counter]);
+	pHeader->DLC = lengthMessage;
+
+	pHeader->TransmitGlobalTime = DISABLE;
+
+	char message[DATA_FIELD] = {0,};
+
+	strcpy(message, &(*messages[counter]));
+
+	counter++;
+	if(counter == amountMessages) counter = 0;
+
+	HAL_CAN_AddTxMessage(&(*hcan), &(*pHeader), (uint8_t*)message, &TxMailbox);
 }
 
 //---------------------------------------------------------------------------
