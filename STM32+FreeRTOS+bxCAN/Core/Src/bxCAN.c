@@ -19,6 +19,8 @@
 
 #define DATA_FIELD								(8U) // bytes
 
+#define AMOUNT_MESSAGES							(20U)
+
 //---------------------------------------------------------------------------
 // Typedefs
 //---------------------------------------------------------------------------
@@ -51,6 +53,9 @@ static osSemaphoreId SendingMessagesSemHandle;
 uint8_t RxData[DATA_FIELD] = {0,};
 uint8_t TxData[DATA_FIELD] = {0, 1, 2, 3, 4, 5, 6, 7};
 uint32_t TxMailbox = 0;
+
+const uint32_t IDFrames[AMOUNT_MESSAGES] = {0x51F, 0x2B6, 0x9A, 0x7C8, 0x560, 0x622, 0x56E, 0x34E, 0x4B9, 0x42E, 0x38B, 0x1E0,
+										   0x3DB, 0x32A, 0x7B9, 0x772, 0x13B, 0x36C, 0x4B5, 0x3D7};
 
 //---------------------------------------------------------------------------
 // FreeRTOS's threads
