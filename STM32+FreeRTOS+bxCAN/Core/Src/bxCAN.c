@@ -63,15 +63,22 @@ uint32_t TxMailbox = 0;
 */
 void InterruptHandlingSendTask(void const* argument)
 {
+	uint8_t firstStart = 1;
+
 	bxCAN_CAN1_init();
-	bxCAN_create_message(0x11, CAN_ID_STD, CAN_RTR_DATA, 8, &TxHeader);
-	HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox);
+
 
 	/* Infinite loop */
 	for(;;)
 	{
 		osSemaphoreWait(SendingMessagesSemHandle, portMAX_DELAY);
-		HAL_CAN_DeactivateNotification(&hcan1, CAN_IT_TX_MAILBOX_EMPTY);
+
+		if(firstStart == 1)
+		{
+			bxCAN_create_message(0x11, CAN_ID_STD, CAN_RTR_DATA, 8, &TxHeader);
+			HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox);
+		}
+		firstStart = 0;
 	}
 }
 
