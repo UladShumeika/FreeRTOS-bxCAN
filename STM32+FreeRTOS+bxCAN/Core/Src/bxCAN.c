@@ -296,15 +296,7 @@ void HAL_CAN_TxMailbox0CompleteCallback(CAN_HandleTypeDef *hcan)
   */
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef * hcan)
 {
-	static portBASE_TYPE xHigherPriorityTaskWoken;
-	xHigherPriorityTaskWoken = pdFALSE;
-
-	xSemaphoreGiveFromISR(InterruptRxFIFO0SemHandle, &xHigherPriorityTaskWoken);
-
-	if(xHigherPriorityTaskWoken == pdTRUE)
-	{
-		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-	}
+	osSemaphoreRelease(InterruptRxFIFO0SemHandle);
 }
 
 /**
