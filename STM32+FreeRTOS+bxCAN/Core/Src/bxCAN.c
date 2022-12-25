@@ -110,7 +110,6 @@ void InterruptHandlingErrorTask(void const* argument)
 	for(;;)
 	{
 		osSemaphoreWait(InterruprtErrorCANSemHandle, portMAX_DELAY);
-
 		osDelay(1);
 	}
 }
@@ -304,6 +303,7 @@ void HAL_CAN_TxMailbox0CompleteCallback(CAN_HandleTypeDef *hcan)
   */
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef * hcan)
 {
+	HAL_CAN_DeactivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING);
 	osSemaphoreRelease(InterruptRxFIFO0SemHandle);
 }
 
