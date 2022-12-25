@@ -263,6 +263,12 @@ void bxCAN_FreeRTOS_init(void)
 	// definition and creation of SendingMessagesSem
 	osSemaphoreDef(SendingMessagesSem);
 	SendingMessagesSemHandle = osSemaphoreCreate(osSemaphore(SendingMessagesSem), 1);
+
+#ifdef DEBUG
+	vQueueAddToRegistry(InterruptRxFIFO0SemHandle, "semReceiving");
+	vQueueAddToRegistry(SendingMessagesSemHandle, "semSending");
+	vQueueAddToRegistry(InterruprtErrorCANSemHandle, "semError");
+#endif
 }
 
 //---------------------------------------------------------------------------
