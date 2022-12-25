@@ -277,15 +277,7 @@ void bxCAN_FreeRTOS_init(void)
   */
 void HAL_CAN_TxMailbox0CompleteCallback(CAN_HandleTypeDef *hcan)
 {
-	static portBASE_TYPE xHigherPriorityTaskWoken;
-	xHigherPriorityTaskWoken = pdFALSE;
-
-	xSemaphoreGiveFromISR(SendingMessagesSemHandle, &xHigherPriorityTaskWoken);
-
-	if(xHigherPriorityTaskWoken == pdTRUE)
-	{
-		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-	}
+	osSemaphoreRelease(SendingMessagesSemHandle);
 }
 
 /**
