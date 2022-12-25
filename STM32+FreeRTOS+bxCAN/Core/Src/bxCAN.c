@@ -55,8 +55,8 @@ uint8_t RxData[DATA_FIELD] = {0,};
 
 const uint32_t idFrames[AMOUNT_MESSAGES] = {0x51F, 0x2B6, 0x9A, 0x7C8, 0x560, 0x622, 0x56E, 0x34E, 0x4B9, 0x42E, 0x38B, 0x1E0,
 										   0x3DB, 0x32A, 0x7B9, 0x772, 0x13B, 0x36C, 0x4B5, 0x3D7};
-const char* messages[AMOUNT_MESSAGES] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
-		"twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"};
+const char* messages[AMOUNT_MESSAGES] = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
+		"twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
 
 //---------------------------------------------------------------------------
 // FreeRTOS's threads
