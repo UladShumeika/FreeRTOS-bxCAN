@@ -309,7 +309,7 @@ void HAL_MPU_ConfigRegion(MPU_Region_InitTypeDef *MPU_Init);
                                        ((GROUP) == NVIC_PRIORITYGROUP_3) || \
                                        ((GROUP) == NVIC_PRIORITYGROUP_4))
 
-#define IS_NVIC_PREEMPTION_PRIORITY(PRIORITY)  ((PRIORITY) < 0x10U)
+#define IS_NVIC_PREEMPTION_PRIORITY(PRIORITY)  ((PRIORITY) < 0x16U)
 
 #define IS_NVIC_SUB_PRIORITY(PRIORITY)         ((PRIORITY) < 0x10U)
 
