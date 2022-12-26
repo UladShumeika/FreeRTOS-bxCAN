@@ -15,6 +15,10 @@
 //---------------------------------------------------------------------------
 static void SystemClock_Config(void);
 
+//---------------------------------------------------------------------------
+// Main function
+//---------------------------------------------------------------------------
+
 /**
   * @brief  The application entry point.
   * @retval int
@@ -40,6 +44,22 @@ int main(void)
 //---------------------------------------------------------------------------
 // Others functions
 //---------------------------------------------------------------------------
+
+/**
+ * @brief printf redirection
+ */
+int _write(int file, char *ptr, int len)
+{
+	int DataIdx;
+
+	for (DataIdx = 0; DataIdx < len; DataIdx++)
+	{
+		//__io_putchar(*ptr++);
+		ITM_SendChar(*ptr++);
+	}
+
+	return len;
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.
@@ -127,7 +147,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   */
 void assert_failed(uint8_t *file, uint32_t line)
 {
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+	printf("Wrong parameters value: file %s on line %ld\r\n", file, line);
 }
 #endif /* USE_FULL_ASSERT */
