@@ -42,4 +42,8 @@ void MX_FREERTOS_Init(void)
 	bxCAN_FreeRTOS_init();
 #endif
 
+#ifdef UART
+	UART_FreeRTOS_init();
+#endif
+
 }

@@ -18,3 +18,13 @@
 //---------------------------------------------------------------------------
 // Initialization functions
 //---------------------------------------------------------------------------
+
+/**
+  * @brief  FreeRTOS initialization for UART module
+  * @param  None
+  * @retval None
+  */
+void UART_FreeRTOS_init(void)
+{
+
+}
