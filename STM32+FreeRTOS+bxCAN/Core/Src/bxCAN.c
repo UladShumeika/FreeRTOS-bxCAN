@@ -97,6 +97,8 @@ void InterruptHandlingSendTask(void const* argument)
 */
 void InterruptHandlingRxFIFO0Task(void const* argument)
 {
+	uint8_t data[DATA_FIELD + 1] = {0,};
+
 	/* Infinite loop */
 	for(;;)
 	{
@@ -153,7 +155,7 @@ static void bxCAN_create_and_add_message(CAN_HandleTypeDef* hcan, const uint32_t
 
 	pHeader->TransmitGlobalTime = DISABLE;
 
-	char message[DATA_FIELD] = {0,};
+	char message[DATA_FIELD + 2] = {0,}; // +2 added for correct line copying. Since "seventeen" together with \0 has 10 characters
 
 	strcpy(message, &(*messages[counter]));
 
