@@ -51,8 +51,8 @@ osPoolId mpool;
 //---------------------------------------------------------------------------
 // Variables
 //---------------------------------------------------------------------------
-const uint32_t idFrames[AMOUNT_MESSAGES] = {0x51F, 0x2B6, 0x9A, 0x7C8, 0x560, 0x622, 0x56E, 0x34E, 0x4B9, 0x42E, 0x38B, 0x1E0,
-										   0x3DB, 0x32A, 0x7B9, 0x772, 0x13B, 0x36C, 0x4B5, 0x3D7};
+const uint32_t idFrames[AMOUNT_MESSAGES] = {0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0056, 0x056E, 0x034E, 0x04B9, 0x042E, 0x038B, 0x01E0,
+										    0x03DB, 0x032A, 0x07B9, 0x0772, 0x013B, 0x036C, 0x04B5, 0x03D7};
 const char* messages[AMOUNT_MESSAGES] = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
 		"twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
 
