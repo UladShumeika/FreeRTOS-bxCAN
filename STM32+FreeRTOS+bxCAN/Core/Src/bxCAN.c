@@ -203,7 +203,7 @@ static void bxCAN_CAN1_init(void)
 	bxCAN_GPIO_init();
 
 	hcan1.Instance 							= CAN1;
-	hcan1.Init.Prescaler 					= 4;
+	hcan1.Init.Prescaler 					= 20;
 	hcan1.Init.Mode 						= CAN_MODE_SILENT_LOOPBACK;
 	hcan1.Init.SyncJumpWidth 				= CAN_SJW_1TQ;
 	hcan1.Init.TimeSeg1 					= CAN_BS1_13TQ;
