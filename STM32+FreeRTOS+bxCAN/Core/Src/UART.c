@@ -33,7 +33,7 @@ void UARTSendingMessagesTask(void const* argument)
 {
 	osEvent event;
 	bxCAN_message_t *Rmessage;
-	uint8_t data[8] = {0,};
+	uint8_t data[DATA_FIELD + 2] = {0,}; // 2 is \r and \n
 	uint32_t length = 0;
 
 	UART_USART_init();
@@ -53,8 +53,11 @@ void UARTSendingMessagesTask(void const* argument)
 				data[counter] = Rmessage->data[counter];
 			}
 
-			HAL_UART_Transmit(&huart1, (uint8_t*)data, (uint16_t)length, HAL_MAX_DELAY);
-			HAL_UART_Transmit(&huart1, (uint8_t*)"\r\n", 2, HAL_MAX_DELAY);
+			uint8_t counter = length;
+			data[counter++] = '\r';
+			data[counter++] = '\n';
+
+			HAL_UART_Transmit(&huart1, (uint8_t*)data, (uint16_t)(length + 2), HAL_MAX_DELAY); // 2 is \r and \n
 			osPoolFree(mpool, Rmessage);
 		}
 	}
