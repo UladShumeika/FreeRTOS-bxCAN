@@ -17,6 +17,7 @@ extern "C" {
 // External function prototypes
 //---------------------------------------------------------------------------
 void UART_FreeRTOS_init(void);
+void UARTSendingMessagesTask(void const* argument);
 
 #ifdef __cplusplus
 }
