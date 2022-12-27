@@ -4,11 +4,6 @@
 #include "UART.h"
 
 //---------------------------------------------------------------------------
-// Defines
-//---------------------------------------------------------------------------
-#define QUEUE_SIZE								(5U)
-
-//---------------------------------------------------------------------------
 // Typedefs
 //---------------------------------------------------------------------------
 static UART_HandleTypeDef huart1;
@@ -22,7 +17,7 @@ static void UART_USART_init(void);
 // Descriptions of FreeRTOS elements
 //---------------------------------------------------------------------------
 static osThreadId UARTSendingMessagesHandle;
-osMessageQId dataFromCANHandle;
+extern osMessageQId dataFromCANHandle;
 osPoolId mpool;
 
 //---------------------------------------------------------------------------
@@ -113,16 +108,6 @@ void UART_FreeRTOS_init(void)
 	osThreadDef(UARTSending, UARTSendingMessagesTask, osPriorityBelowNormal, 0, 128);
 	UARTSendingMessagesHandle = osThreadCreate(osThread(UARTSending), NULL);
 
-	// Create the queue(s)
-	// definition and creation of dataFromCANQueue
-	osMessageQDef(sendDataFromCAN, QUEUE_SIZE, bxCAN_message_t);
-	dataFromCANHandle = osMessageCreate(osMessageQ(sendDataFromCAN), NULL);
-
 	osPoolDef(mpool, 16, bxCAN_message_t);
 	mpool = osPoolCreate(osPool(mpool));
-
-#ifdef DEBUG
-	vQueueAddToRegistry(dataFromCANHandle, "data from CAN");
-#endif
-
 }

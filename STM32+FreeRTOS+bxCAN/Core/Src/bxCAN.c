@@ -8,6 +8,10 @@
 // Defines
 //---------------------------------------------------------------------------
 
+#define AMOUNT_MESSAGES							(20U)
+
+#define QUEUE_SIZE								(5U)
+
 // CAN1 interrupt priorities
 #define CAN1_TX_PREEMPPRIORITY					(5U)
 #define CAN1_TX_SUBPRIORITY						(0U)
@@ -17,8 +21,6 @@
 
 #define CAN1_SCE_PREEMPPRIORITY					(5U)
 #define CAN1_SCE_SUBPRIORITY					(0U)
-
-#define AMOUNT_MESSAGES							(20U)
 
 //---------------------------------------------------------------------------
 // Typedefs
@@ -42,7 +44,7 @@ static osThreadId InterruptHandlingSendHandle;
 static osSemaphoreId InterruptRxFIFO0SemHandle;
 static osSemaphoreId InterruprtErrorCANSemHandle;
 static osSemaphoreId SendingMessagesSemHandle;
-extern osMessageQId dataFromCANHandle;
+osMessageQId dataFromCANHandle;
 extern osPoolId mpool;
 
 //---------------------------------------------------------------------------
@@ -300,10 +302,16 @@ void bxCAN_FreeRTOS_init(void)
 	osSemaphoreDef(SendingMessagesSem);
 	SendingMessagesSemHandle = osSemaphoreCreate(osSemaphore(SendingMessagesSem), 1);
 
+	// Create the queue(s)
+	// definition and creation of dataFromCANQueue
+	osMessageQDef(sendDataFromCAN, QUEUE_SIZE, bxCAN_message_t);
+	dataFromCANHandle = osMessageCreate(osMessageQ(sendDataFromCAN), NULL);
+
 #ifdef DEBUG
 	vQueueAddToRegistry(InterruptRxFIFO0SemHandle, "semReceiving");
 	vQueueAddToRegistry(SendingMessagesSemHandle, "semSending");
 	vQueueAddToRegistry(InterruprtErrorCANSemHandle, "semError");
+	vQueueAddToRegistry(dataFromCANHandle, "data from CAN");
 #endif
 }
 
