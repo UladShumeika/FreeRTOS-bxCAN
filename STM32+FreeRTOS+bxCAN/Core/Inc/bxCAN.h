@@ -16,7 +16,7 @@ extern "C" {
 //---------------------------------------------------------------------------
 // Defines
 //---------------------------------------------------------------------------
-#define DATA_FIELD								(8U) // bytes
+#define DATA_FIELD 								(8U) // bytes
 
 //---------------------------------------------------------------------------
 // Typedefs
@@ -29,7 +29,7 @@ typedef struct
 {
 	uint32_t id;
 	uint32_t length;
-	uint8_t data[8];
+	uint8_t data[DATA_FIELD];
 
 } bxCAN_message_t;
 
@@ -37,6 +37,9 @@ typedef struct
 // External function prototypes
 //---------------------------------------------------------------------------
 void bxCAN_FreeRTOS_init(void);
+void InterruptHandlingSendTask(void const* argument);
+void InterruptHandlingRxFIFO0Task(void const* argument);
+void InterruptHandlingErrorTask(void const* argument);
 
 #ifdef __cplusplus
 }
