@@ -66,23 +66,13 @@ const char* messages[AMOUNT_MESSAGES] = {"zero", "one", "two", "three", "four", 
 */
 void InterruptHandlingSendTask(void const* argument)
 {
-	uint8_t firstStart = 1;
-
 	bxCAN_CAN1_init();
 
 	/* Infinite loop */
 	for(;;)
 	{
 		osSemaphoreWait(SendingMessagesSemHandle, osWaitForever);
-
-		if(firstStart == 1)
-		{
-			firstStart = 0;
-			bxCAN_create_and_add_message(&hcan1, idFrames, messages, AMOUNT_MESSAGES, &TxHeader);
-		} else
-		{
-			bxCAN_create_and_add_message(&hcan1, idFrames, messages, AMOUNT_MESSAGES, &TxHeader);
-		}
+		bxCAN_create_and_add_message(&hcan1, idFrames, messages, AMOUNT_MESSAGES, &TxHeader);
 	}
 }
 
