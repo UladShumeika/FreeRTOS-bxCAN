@@ -4,6 +4,11 @@
 #include "UART.h"
 
 //---------------------------------------------------------------------------
+// Defines
+//---------------------------------------------------------------------------
+#define QUEUE_SIZE								(5U)
+
+//---------------------------------------------------------------------------
 // Typedefs
 //---------------------------------------------------------------------------
 static UART_HandleTypeDef huart1;
@@ -17,6 +22,8 @@ static void UART_USART_init(void);
 // Descriptions of FreeRTOS elements
 //---------------------------------------------------------------------------
 static osThreadId UARTSendingMessagesHandle;
+osMessageQId dataFromCANHandle;
+osPoolId mpool;
 
 //---------------------------------------------------------------------------
 // FreeRTOS's threads
@@ -29,12 +36,32 @@ static osThreadId UARTSendingMessagesHandle;
 */
 void UARTSendingMessagesTask(void const* argument)
 {
+	osEvent event;
+	bxCAN_message_t *Rmessage;
+	uint8_t data[8] = {0,};
+	uint32_t length = 0;
+
 	UART_USART_init();
 
 	/* Infinite loop */
 	for(;;)
 	{
-		osDelay(1);
+		event = osMessageGet(dataFromCANHandle, osWaitForever);
+
+		if(event.status == osEventMessage)
+		{
+			Rmessage = event.value.p;
+			length = Rmessage->length;
+
+			for(uint8_t counter = 0; counter <= length; counter++)
+			{
+				data[counter] = Rmessage->data[counter];
+			}
+
+			HAL_UART_Transmit(&huart1, (uint8_t*)data, (uint16_t)length, HAL_MAX_DELAY);
+			HAL_UART_Transmit(&huart1, (uint8_t*)"\r\n", 2, HAL_MAX_DELAY);
+			osPoolFree(mpool, Rmessage);
+		}
 	}
 }
 
@@ -83,6 +110,19 @@ void UART_FreeRTOS_init(void)
 {
 	// Create the thread(s)
 	// definition and creation of UARTSendingMessagesTask
-	osThreadDef(UARTSending, UARTSendingMessagesTask, osPriorityAboveNormal, 0, 128);
+	osThreadDef(UARTSending, UARTSendingMessagesTask, osPriorityBelowNormal, 0, 128);
 	UARTSendingMessagesHandle = osThreadCreate(osThread(UARTSending), NULL);
+
+	// Create the queue(s)
+	// definition and creation of dataFromCANQueue
+	osMessageQDef(sendDataFromCAN, QUEUE_SIZE, bxCAN_message_t);
+	dataFromCANHandle = osMessageCreate(osMessageQ(sendDataFromCAN), NULL);
+
+	osPoolDef(mpool, 16, bxCAN_message_t);
+	mpool = osPoolCreate(osPool(mpool));
+
+#ifdef DEBUG
+	vQueueAddToRegistry(dataFromCANHandle, "data from CAN");
+#endif
+
 }
