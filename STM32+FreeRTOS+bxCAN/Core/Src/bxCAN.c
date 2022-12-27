@@ -26,7 +26,7 @@
 CAN_HandleTypeDef hcan1;
 CAN_FilterTypeDef sFilterConfig;
 
-CAN_RxHeaderTypeDef RxHeader;
+
 CAN_TxHeaderTypeDef TxHeader;
 
 //---------------------------------------------------------------------------
@@ -71,7 +71,6 @@ void InterruptHandlingSendTask(void const* argument)
 
 	bxCAN_CAN1_init();
 
-
 	/* Infinite loop */
 	for(;;)
 	{
@@ -95,7 +94,9 @@ void InterruptHandlingSendTask(void const* argument)
 */
 void InterruptHandlingRxFIFO0Task(void const* argument)
 {
-	uint8_t data[DATA_FIELD + 1] = {0,};
+	CAN_RxHeaderTypeDef RxHeader;
+	bxCAN_message_t *Tmessage;
+	uint8_t lengthMessage = 0, previusLengthMessage = 0;
 
 	/* Infinite loop */
 	for(;;)
@@ -103,6 +104,26 @@ void InterruptHandlingRxFIFO0Task(void const* argument)
 		osSemaphoreWait(InterruptRxFIFO0SemHandle, portMAX_DELAY);
 
 		HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &RxHeader, RxData);
+
+		Tmessage = osPoolAlloc(mpool);
+		Tmessage->id = RxHeader.StdId;
+		Tmessage->length = RxHeader.DLC;
+		lengthMessage = Tmessage->length;
+
+		for(uint8_t counter = 0; counter < previusLengthMessage; counter++)
+		{
+			Tmessage->data[counter] = 0;
+		}
+
+		for(uint8_t counter = 0; counter < lengthMessage; counter++)
+		{
+			Tmessage->data[counter] = RxData[counter];
+		}
+
+		previusLengthMessage = lengthMessage;
+
+		osMessagePut(dataFromCANHandle, (uint32_t)Tmessage, osWaitForever);
+
 		HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING);
 	}
 }
