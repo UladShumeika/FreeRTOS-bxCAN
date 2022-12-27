@@ -18,8 +18,6 @@
 #define CAN1_SCE_PREEMPPRIORITY					(5U)
 #define CAN1_SCE_SUBPRIORITY					(0U)
 
-#define DATA_FIELD								(8U) // bytes
-
 #define AMOUNT_MESSAGES							(20U)
 
 //---------------------------------------------------------------------------
