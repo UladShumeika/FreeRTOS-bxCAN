@@ -45,6 +45,8 @@ static osThreadId InterruptHandlingSendHandle;
 static osSemaphoreId InterruptRxFIFO0SemHandle;
 static osSemaphoreId InterruprtErrorCANSemHandle;
 static osSemaphoreId SendingMessagesSemHandle;
+extern osMessageQId dataFromCANHandle;
+extern osPoolId mpool;
 
 //---------------------------------------------------------------------------
 // Variables
