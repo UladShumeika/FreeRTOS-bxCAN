@@ -24,9 +24,6 @@
 // Typedefs
 //---------------------------------------------------------------------------
 CAN_HandleTypeDef hcan1;
-CAN_FilterTypeDef sFilterConfig;
-
-
 CAN_TxHeaderTypeDef TxHeader;
 
 //---------------------------------------------------------------------------
@@ -198,6 +195,8 @@ static void bxCAN_create_and_add_message(CAN_HandleTypeDef* hcan, const uint32_t
   */
 static void bxCAN_CAN1_init(void)
 {
+	CAN_FilterTypeDef sFilterConfig;
+
 	__HAL_RCC_CAN1_CLK_ENABLE();
 
 	bxCAN_GPIO_init();
