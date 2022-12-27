@@ -73,7 +73,7 @@ void InterruptHandlingSendTask(void const* argument)
 	/* Infinite loop */
 	for(;;)
 	{
-		osSemaphoreWait(SendingMessagesSemHandle, portMAX_DELAY);
+		osSemaphoreWait(SendingMessagesSemHandle, osWaitForever);
 
 		if(firstStart == 1)
 		{
@@ -100,7 +100,7 @@ void InterruptHandlingRxFIFO0Task(void const* argument)
 	/* Infinite loop */
 	for(;;)
 	{
-		osSemaphoreWait(InterruptRxFIFO0SemHandle, portMAX_DELAY);
+		osSemaphoreWait(InterruptRxFIFO0SemHandle, osWaitForever);
 
 		HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &RxHeader, RxData);
 
@@ -137,7 +137,7 @@ void InterruptHandlingErrorTask(void const* argument)
 	/* Infinite loop */
 	for(;;)
 	{
-		osSemaphoreWait(InterruprtErrorCANSemHandle, portMAX_DELAY);
+		osSemaphoreWait(InterruprtErrorCANSemHandle, osWaitForever);
 		osDelay(1);
 	}
 }
