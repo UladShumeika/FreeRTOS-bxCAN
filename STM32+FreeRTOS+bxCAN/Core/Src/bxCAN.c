@@ -11,6 +11,7 @@
 #define AMOUNT_MESSAGES							(20U)
 
 #define QUEUE_SIZE								(5U)
+#define ELEMENTS_IN_MEMORY_POOL					(5U)
 
 // CAN1 interrupt priorities
 #define CAN1_TX_PREEMPPRIORITY					(5U)
@@ -45,7 +46,7 @@ static osSemaphoreId InterruptRxFIFO0SemHandle;
 static osSemaphoreId InterruprtErrorCANSemHandle;
 static osSemaphoreId SendingMessagesSemHandle;
 osMessageQId dataFromCANHandle;
-extern osPoolId mpool;
+osPoolId mpool;
 
 //---------------------------------------------------------------------------
 // Variables
@@ -306,6 +307,11 @@ void bxCAN_FreeRTOS_init(void)
 	// definition and creation of dataFromCANQueue
 	osMessageQDef(sendDataFromCAN, QUEUE_SIZE, bxCAN_message_t);
 	dataFromCANHandle = osMessageCreate(osMessageQ(sendDataFromCAN), NULL);
+
+	// Create the memory pool(s)
+	// definition and creation of mpool
+	osPoolDef(mpool, ELEMENTS_IN_MEMORY_POOL, bxCAN_message_t);
+	mpool = osPoolCreate(osPool(mpool));
 
 #ifdef DEBUG
 	vQueueAddToRegistry(InterruptRxFIFO0SemHandle, "semReceiving");

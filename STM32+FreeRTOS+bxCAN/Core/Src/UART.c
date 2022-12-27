@@ -18,7 +18,7 @@ static void UART_USART_init(void);
 //---------------------------------------------------------------------------
 static osThreadId UARTSendingMessagesHandle;
 extern osMessageQId dataFromCANHandle;
-osPoolId mpool;
+extern osPoolId mpool;
 
 //---------------------------------------------------------------------------
 // FreeRTOS's threads
@@ -107,7 +107,4 @@ void UART_FreeRTOS_init(void)
 	// definition and creation of UARTSendingMessagesTask
 	osThreadDef(UARTSending, UARTSendingMessagesTask, osPriorityBelowNormal, 0, 128);
 	UARTSendingMessagesHandle = osThreadCreate(osThread(UARTSending), NULL);
-
-	osPoolDef(mpool, 16, bxCAN_message_t);
-	mpool = osPoolCreate(osPool(mpool));
 }
