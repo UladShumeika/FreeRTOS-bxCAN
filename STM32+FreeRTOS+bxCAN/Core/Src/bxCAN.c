@@ -172,6 +172,7 @@ static void bxCAN_create_and_add_message(CAN_HandleTypeDef* hcan, const uint32_t
 	pHeader->RTR = CAN_RTR_DATA;
 
 	lengthMessage = strlen(messages[counter]);
+	if(lengthMessage > DATA_FIELD) lengthMessage = DATA_FIELD; // this is a temporary solution since "seventeen" has nine characters
 	pHeader->DLC = lengthMessage;
 
 	pHeader->TransmitGlobalTime = DISABLE;
