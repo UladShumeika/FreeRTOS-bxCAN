@@ -9,6 +9,11 @@
 //---------------------------------------------------------------------------
 
 // Filter configuration -----------------------------------------------------
+#define USE_FILTER_MODE1						// from ID1 to ID5 inclusive
+//#define USE_FILTER_MODE2
+//#define USE_FILTER_MODE3
+//#define USE_FILTER_MODE4
+
 #define AMOUNT_MESSAGES						    (20U)
 
 #define	IDENTIFIER_1							0x0000
@@ -235,12 +240,13 @@ static void bxCAN_CAN1_init(void)
 		Error_Handler();
 	}
 
-	sFilterConfig.FilterIdHigh				= 0x0000;
+#ifdef USE_FILTER_MODE1
+	sFilterConfig.FilterIdHigh				= (IDENTIFIER_1 << 5); 			// appNote RM0090 p.1088
 	sFilterConfig.FilterIdLow				= 0x0000;
-	sFilterConfig.FilterMaskIdHigh			= 0x0000;
+	sFilterConfig.FilterMaskIdHigh			= (0x07F8 << 5);
 	sFilterConfig.FilterMaskIdLow			= 0x0000;
 	sFilterConfig.FilterFIFOAssignment		= CAN_FILTER_FIFO0;
-	sFilterConfig.FilterBank				= 0;
+	sFilterConfig.FilterBank				= FILTER_NUM1;
 	sFilterConfig.FilterMode				= CAN_FILTERMODE_IDMASK;
 	sFilterConfig.FilterScale				= CAN_FILTERSCALE_32BIT;
 	sFilterConfig.FilterActivation			= CAN_FILTER_ENABLE;
