@@ -246,8 +246,8 @@ static void bxCAN_CAN1_init(void)
 	}
 
 #ifdef USE_FILTER_MODE1
-	sFilterConfig.FilterIdHigh				= (IDENTIFIER_1 << 5); 			// appNote RM0090 p.1088
-	sFilterConfig.FilterIdLow				= 0x0000;
+	sFilterConfig.FilterIdHigh				= (IDENTIFIER_1 << 5); 		// for understanding why the shift is used and why there is such,
+	sFilterConfig.FilterIdLow				= 0x0000;					// it's necessary to refer to the appNote RM0090, p. 1088
 	sFilterConfig.FilterMaskIdHigh			= (0x07F8 << 5);
 	sFilterConfig.FilterMaskIdLow			= 0x0000;
 	sFilterConfig.FilterFIFOAssignment		= CAN_FILTER_FIFO0;
@@ -264,8 +264,8 @@ static void bxCAN_CAN1_init(void)
 #endif
 
 #ifdef USE_FILTER_MODE2
-	sFilterConfig.FilterIdHigh				= (IDENTIFIER_6 << 5);
-	sFilterConfig.FilterIdLow				= 0x0000;
+	sFilterConfig.FilterIdHigh				= (IDENTIFIER_6 << 5);		// for understanding why the shift is used and why there is such,
+	sFilterConfig.FilterIdLow				= 0x0000;					// it's necessary to refer to the appNote RM0090, p. 1088
 	sFilterConfig.FilterMaskIdHigh			= (IDENTIFIER_7 << 5);
 	sFilterConfig.FilterMaskIdLow			= 0x0000;
 	sFilterConfig.FilterFIFOAssignment		= CAN_FILTER_FIFO0;
@@ -282,13 +282,13 @@ static void bxCAN_CAN1_init(void)
 #endif
 
 #ifdef USE_FILTER_MODE3
-	sFilterConfig.FilterIdHigh				= (0x0078 << 5);
-	sFilterConfig.FilterIdLow				= (IDENTIFIER_13 << 5);
-	sFilterConfig.FilterMaskIdHigh			= (0x0078 << 5);
-	sFilterConfig.FilterMaskIdLow			= (0x07F8 << 5);
-	sFilterConfig.FilterFIFOAssignment		= CAN_FILTER_FIFO0;
-	sFilterConfig.FilterBank				= FILTER_NUM3;
-	sFilterConfig.FilterMode				= CAN_FILTERMODE_IDMASK;
+	sFilterConfig.FilterIdHigh				= (0x0078 << 5);			// Why is 0x0078 used. Given the features of filter settings,
+	sFilterConfig.FilterIdLow				= (IDENTIFIER_13 << 5);		// it's impossible to set up filters from 0x007A to 0x007E identifiers,
+	sFilterConfig.FilterMaskIdHigh			= (0x0078 << 5);			// however, it's possible to set the range from 0x0078 to 0x007f. With
+	sFilterConfig.FilterMaskIdLow			= (0x07F8 << 5);			// a similar range, the task in this mode is solved, however, if
+	sFilterConfig.FilterFIFOAssignment		= CAN_FILTER_FIFO0;			// to add identifiers 0x0079 and 0x007f, they will also pass the filter.
+	sFilterConfig.FilterBank				= FILTER_NUM3;				// For understanding why the shift is used and why there is such,
+	sFilterConfig.FilterMode				= CAN_FILTERMODE_IDMASK;	// it's necessary to refer to the appNote RM0090, p. 1088
 	sFilterConfig.FilterScale				= CAN_FILTERSCALE_16BIT;
 	sFilterConfig.FilterActivation			= CAN_FILTER_ENABLE;
 	sFilterConfig.SlaveStartFilterBank		= 14;
@@ -300,8 +300,8 @@ static void bxCAN_CAN1_init(void)
 #endif
 
 #ifdef USE_FILTER_MODE4
-	sFilterConfig.FilterIdHigh				= (IDENTIFIER_17 << 5);
-	sFilterConfig.FilterIdLow				= (IDENTIFIER_18 << 5);
+	sFilterConfig.FilterIdHigh				= (IDENTIFIER_17 << 5);		// for understanding why the shift is used and why there is such,
+	sFilterConfig.FilterIdLow				= (IDENTIFIER_18 << 5);		// it's necessary to refer to the appNote RM0090, p. 1088
 	sFilterConfig.FilterMaskIdHigh			= (IDENTIFIER_19 << 5);
 	sFilterConfig.FilterMaskIdLow			= (IDENTIFIER_20 << 5);
 	sFilterConfig.FilterFIFOAssignment		= CAN_FILTER_FIFO0;
