@@ -37,6 +37,11 @@
 #define	IDENTIFIER_19							0x0654
 #define	IDENTIFIER_20							0x0765
 
+#define FILTER_NUM1								(0U)
+#define FILTER_NUM2								(1U)
+#define FILTER_NUM3								(2U)
+#define FILTER_NUM4								(3U)
+
 // System settings ----------------------------------------------------------
 #define QUEUE_SIZE								(5U)
 #define ELEMENTS_IN_MEMORY_POOL					(5U)
