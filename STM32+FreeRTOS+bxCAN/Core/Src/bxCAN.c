@@ -9,10 +9,10 @@
 //---------------------------------------------------------------------------
 
 // Filter configuration -----------------------------------------------------
-//#define USE_FILTER_MODE1						// from ID1 to ID5 inclusive
-//#define USE_FILTER_MODE2						// ID6 and ID7
+#define USE_FILTER_MODE1						// from ID1 to ID5 inclusive
+#define USE_FILTER_MODE2						// ID6 and ID7
 #define USE_FILTER_MODE3						// from ID8 to ID12 inclusive and from ID13 to ID16 inclusive
-//#define USE_FILTER_MODE4
+#define USE_FILTER_MODE4						// ID19 and ID20
 
 #define AMOUNT_MESSAGES						    (20U)
 
