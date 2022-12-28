@@ -299,6 +299,24 @@ static void bxCAN_CAN1_init(void)
 	}
 #endif
 
+#ifdef USE_FILTER_MODE4
+	sFilterConfig.FilterIdHigh				= (IDENTIFIER_17 << 5);
+	sFilterConfig.FilterIdLow				= (IDENTIFIER_18 << 5);
+	sFilterConfig.FilterMaskIdHigh			= (IDENTIFIER_19 << 5);
+	sFilterConfig.FilterMaskIdLow			= (IDENTIFIER_20 << 5);
+	sFilterConfig.FilterFIFOAssignment		= CAN_FILTER_FIFO0;
+	sFilterConfig.FilterBank				= FILTER_NUM4;
+	sFilterConfig.FilterMode				= CAN_FILTERMODE_IDLIST;
+	sFilterConfig.FilterScale				= CAN_FILTERSCALE_16BIT;
+	sFilterConfig.FilterActivation			= CAN_FILTER_ENABLE;
+	sFilterConfig.SlaveStartFilterBank		= 14;
+
+	if(HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
+	{
+		Error_Handler();
+	}
+#endif
+
 	HAL_CAN_Start(&hcan1);
 
 	HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING |
