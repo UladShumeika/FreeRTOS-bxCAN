@@ -8,8 +8,31 @@
 // Defines
 //---------------------------------------------------------------------------
 
-#define AMOUNT_MESSAGES							(20U)
+// Filter configuration -----------------------------------------------------
+#define AMOUNT_MESSAGES						    (20U)
 
+#define	IDENTIFIER_1							0x0000
+#define	IDENTIFIER_2							0x0001
+#define	IDENTIFIER_3							0x0002
+#define	IDENTIFIER_4							0x0003
+#define	IDENTIFIER_5							0x0004
+#define	IDENTIFIER_6							0x000B
+#define	IDENTIFIER_7							0x000C
+#define	IDENTIFIER_8							0x007A
+#define	IDENTIFIER_9							0x007B
+#define	IDENTIFIER_10							0x007C
+#define	IDENTIFIER_11							0x007D
+#define	IDENTIFIER_12							0x007E
+#define	IDENTIFIER_13							0x07A1
+#define	IDENTIFIER_14							0x07A2
+#define	IDENTIFIER_15							0x07A3
+#define	IDENTIFIER_16							0x07A4
+#define	IDENTIFIER_17							0x0432
+#define	IDENTIFIER_18							0x0543
+#define	IDENTIFIER_19							0x0654
+#define	IDENTIFIER_20							0x0765
+
+// System settings ----------------------------------------------------------
 #define QUEUE_SIZE								(5U)
 #define ELEMENTS_IN_MEMORY_POOL					(5U)
 
@@ -51,8 +74,10 @@ osPoolId mpool;
 //---------------------------------------------------------------------------
 // Variables
 //---------------------------------------------------------------------------
-const uint32_t idFrames[AMOUNT_MESSAGES] = {0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0056, 0x056E, 0x034E, 0x04B9, 0x042E, 0x038B, 0x01E0,
-										    0x03DB, 0x032A, 0x07B9, 0x0772, 0x013B, 0x036C, 0x04B5, 0x03D7};
+const uint32_t idFrames[AMOUNT_MESSAGES] = {IDENTIFIER_1, IDENTIFIER_2, IDENTIFIER_3, IDENTIFIER_4, IDENTIFIER_5, IDENTIFIER_6, IDENTIFIER_7,
+											IDENTIFIER_8, IDENTIFIER_9, IDENTIFIER_10, IDENTIFIER_11, IDENTIFIER_12, IDENTIFIER_13,
+											IDENTIFIER_14, IDENTIFIER_15, IDENTIFIER_16, IDENTIFIER_17, IDENTIFIER_18, IDENTIFIER_19,
+											IDENTIFIER_20};
 const char* messages[AMOUNT_MESSAGES] = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
 		"twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
 
