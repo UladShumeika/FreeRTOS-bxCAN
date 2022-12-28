@@ -10,8 +10,8 @@
 
 // Filter configuration -----------------------------------------------------
 #define USE_FILTER_MODE1						// from ID1 to ID5 inclusive
-//#define USE_FILTER_MODE2
-//#define USE_FILTER_MODE3
+#define USE_FILTER_MODE2						// ID6 and ID7
+//#define USE_FILTER_MODE3						// from ID8 to ID12 inclusive and from ID13 to ID16 inclusive
 //#define USE_FILTER_MODE4
 
 #define AMOUNT_MESSAGES						    (20U)
@@ -261,6 +261,25 @@ static void bxCAN_CAN1_init(void)
 	{
 		Error_Handler();
 	}
+#endif
+
+#ifdef USE_FILTER_MODE2
+	sFilterConfig.FilterIdHigh				= (IDENTIFIER_6 << 5);
+	sFilterConfig.FilterIdLow				= 0x0000;
+	sFilterConfig.FilterMaskIdHigh			= (IDENTIFIER_7 << 5);
+	sFilterConfig.FilterMaskIdLow			= 0x0000;
+	sFilterConfig.FilterFIFOAssignment		= CAN_FILTER_FIFO0;
+	sFilterConfig.FilterBank				= FILTER_NUM2;
+	sFilterConfig.FilterMode				= CAN_FILTERMODE_IDLIST;
+	sFilterConfig.FilterScale				= CAN_FILTERSCALE_32BIT;
+	sFilterConfig.FilterActivation			= CAN_FILTER_ENABLE;
+	sFilterConfig.SlaveStartFilterBank		= 14;
+
+	if(HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
+	{
+		Error_Handler();
+	}
+#endif
 
 	HAL_CAN_Start(&hcan1);
 
