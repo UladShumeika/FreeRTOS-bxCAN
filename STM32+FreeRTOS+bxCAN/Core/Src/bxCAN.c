@@ -9,33 +9,33 @@
 //---------------------------------------------------------------------------
 
 // Filter configuration -----------------------------------------------------
-#define USE_FILTER_MODE1						// from ID1 to ID5 inclusive
-#define USE_FILTER_MODE2						// ID6 and ID7
-//#define USE_FILTER_MODE3						// from ID8 to ID12 inclusive and from ID13 to ID16 inclusive
+//#define USE_FILTER_MODE1						// from ID1 to ID5 inclusive
+//#define USE_FILTER_MODE2						// ID6 and ID7
+#define USE_FILTER_MODE3						// from ID8 to ID12 inclusive and from ID13 to ID16 inclusive
 //#define USE_FILTER_MODE4
 
 #define AMOUNT_MESSAGES						    (20U)
 
-#define	IDENTIFIER_1							0x0000
-#define	IDENTIFIER_2							0x0001
-#define	IDENTIFIER_3							0x0002
-#define	IDENTIFIER_4							0x0003
-#define	IDENTIFIER_5							0x0004
-#define	IDENTIFIER_6							0x000B
-#define	IDENTIFIER_7							0x000C
-#define	IDENTIFIER_8							0x007A
-#define	IDENTIFIER_9							0x007B
-#define	IDENTIFIER_10							0x007C
-#define	IDENTIFIER_11							0x007D
-#define	IDENTIFIER_12							0x007E
-#define	IDENTIFIER_13							0x07A1
-#define	IDENTIFIER_14							0x07A2
-#define	IDENTIFIER_15							0x07A3
-#define	IDENTIFIER_16							0x07A4
-#define	IDENTIFIER_17							0x0432
-#define	IDENTIFIER_18							0x0543
-#define	IDENTIFIER_19							0x0654
-#define	IDENTIFIER_20							0x0765
+#define	IDENTIFIER_1							0x0000		// zero
+#define	IDENTIFIER_2							0x0001		// one
+#define	IDENTIFIER_3							0x0002		// two
+#define	IDENTIFIER_4							0x0003		// three
+#define	IDENTIFIER_5							0x0004		// four
+#define	IDENTIFIER_6							0x000B		// five
+#define	IDENTIFIER_7							0x000C		// six
+#define	IDENTIFIER_8							0x007A		// seven
+#define	IDENTIFIER_9							0x007B		// eight
+#define	IDENTIFIER_10							0x007C		// nine
+#define	IDENTIFIER_11							0x007D		// ten
+#define	IDENTIFIER_12							0x007E		// eleven
+#define	IDENTIFIER_13							0x07A1		// twelve
+#define	IDENTIFIER_14							0x07A2		// thirteen
+#define	IDENTIFIER_15							0x07A3		// fourteen
+#define	IDENTIFIER_16							0x07A4		// fifteen
+#define	IDENTIFIER_17							0x0432		// sixteen
+#define	IDENTIFIER_18							0x0543		// seventeen
+#define	IDENTIFIER_19							0x0654		// eighteen
+#define	IDENTIFIER_20							0x0765		// nineteen
 
 #define FILTER_NUM1								(0U)
 #define FILTER_NUM2								(1U)
