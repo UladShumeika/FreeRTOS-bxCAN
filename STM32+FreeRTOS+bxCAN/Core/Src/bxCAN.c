@@ -317,7 +317,7 @@ static void bxCAN_CAN1_init(void)
 	}
 #endif
 
-#ifndef USE_FILTER_MODE1 || USE_FILTER_MODE2 || USE_FILTER_MODE3 || USE_FILTER_MODE4
+#if !defined(USE_FILTER_MODE1) || !defined(USE_FILTER_MODE2) || !defined(USE_FILTER_MODE3) || !defined(USE_FILTER_MODE4)
 	sFilterConfig.FilterIdHigh				= 0x0000;
 	sFilterConfig.FilterIdLow				= 0x0000;
 	sFilterConfig.FilterMaskIdHigh			= 0x0000;
